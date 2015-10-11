@@ -19,7 +19,7 @@ public:
 template <template <typename... T> class M>
 template <typename X, typename Y>
 M<Y> Monad<M>::map(M<X> xs, const std::function<Y(X)> &fn) {
-    auto kleisli = [fn](X x) { return unit(fn(x)); };
+    auto kleisli = [&fn](X x) { return unit(fn(x)); };
     return bind<X, Y>(xs, kleisli);
 }
 
