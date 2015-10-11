@@ -6,6 +6,8 @@
 
 #include "monad.hpp"
 
+typedef Monad<std::list> ListMonad;
+
 template <typename T>
 void write(std::ostream &os, std::list<T> &ts) {
     os << "[";
@@ -21,7 +23,7 @@ void write(std::ostream &os, std::list<T> &ts) {
 
 template <>
 template <typename X, typename Y>
-std::list<Y> Monad<std::list>::bind(std::list<X> xs, const std::function<std::list<Y>(X)> &fn) {
+std::list<Y> ListMonad::bind(std::list<X> xs, const std::function<std::list<Y>(X)> &fn) {
     std::list<Y> ys;
     std::list<Y> zs;
     for (auto x : xs) {
@@ -33,7 +35,7 @@ std::list<Y> Monad<std::list>::bind(std::list<X> xs, const std::function<std::li
 
 template <>
 template <typename X>
-std::list<X> Monad<std::list>::unit(X x) {
+std::list<X> ListMonad::unit(X x) {
     return std::list<X>(1, x);
 }
 
