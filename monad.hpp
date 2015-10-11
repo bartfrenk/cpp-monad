@@ -1,19 +1,7 @@
-#include <list>
-#include <iostream>
-#include <functional>
+#ifndef MONAD_HPP
+#define MONAD_HPP
 
-template <typename T>
-void write(std::ostream &os, std::list<T> &ts) {
-    os << "[";
-    auto it = ts.begin();
-    if (it != ts.end()) {
-        os << *(it++);
-        for (; it != ts.end(); ++it) {
-            os << ", " << *it;
-        }
-    }
-    os << "]";
-}
+#include <functional>
 
 template <template <typename... T> class M>
 class Monad {
@@ -35,20 +23,4 @@ M<Y> Monad<M>::map(M<X> xs, const std::function<Y(X)> &fn) {
     return bind<X, Y>(xs, kleisli);
 }
 
-template <>
-template <typename X, typename Y>
-std::list<Y> Monad<std::list>::bind(std::list<X> xs, const std::function<std::list<Y>(X)> &fn) {
-    std::list<Y> ys;
-    std::list<Y> zs;
-    for (auto x : xs) {
-        zs = fn(x);
-        ys.insert(ys.end(), zs.begin(), zs.end());
-    }
-    return ys;
-}
-
-template <>
-template <typename X>
-std::list<X> Monad<std::list>::unit(X x) {
-    return std::list<X>(1, x);
-}
+#endif
